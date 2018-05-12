@@ -26,14 +26,40 @@ class PostController
     public function index(): array
     {
         $paginate = Post::getPaginateData([], ['created_at' => 'desc']);
-        return [
-            'data' => $paginate->data->toArray(),
-            'meta' => [
-                'total' => $paginate->total,
-                'current_page' => $paginate->page,
-                'page_size' => $paginate->pageSize,
-            ],
-        ];
+        $data = $paginate->data->toArray();
+        // 计算帖子与标签的关系，最后计算结构如下：
+        // {"34":["1","2","3"],"35":["1","2","3"]}
+        // {post_id: [tag_id, tag_id]}
+        $postIds = array_map(function ($post) {
+            return $post['id'];
+        }, $data);
+        $postTagRelation = PostTag::query()->whereIn('post_id', $postIds)->get()->getResult()->toArray();
+        $postHasManyTags = [];
+        $tagIds = [];
+        foreach ($postTagRelation as $item) {
+            $postHasManyTags[$item['postId']][] = $tagIds[] = $item['tagId'];
+        }
+        // 预读所有需要的TAG，最后结构如下：
+        // {tag_id:tag, tag_id: tag}
+        $tagsTemp = Tag::query()->whereIn('id', $tagIds)->get()->getResult()->toArray();
+        $tags = [];
+        foreach ($tagsTemp as $tagTempItem) {
+            $tags[$tagTempItem['id']] = $tagTempItem;
+        }
+
+        // 整合数据
+        foreach ($data as $key => $postDataItem) {
+            if (isset($postHasManyTags[$postDataItem['id']]) && $postHasManyTags[$postDataItem['id']]) {
+                $data[$key]['tags'] = array_map(function ($tagId) use ($tags) {
+                    return $tags[$tagId];
+                }, $postHasManyTags[$postDataItem['id']]);
+            } else {
+                $data[$key]['tags'] = [];
+            }
+        }
+
+        $paginate->data = $data;
+        return $paginate->toArray();
     }
 
     /**
@@ -75,7 +101,7 @@ class PostController
         }
         $post = $post->toArray();
 
-        $relationData = PostTag::findAll(['post_id' => $postId], ['fields' => ['tag_id']])->getResult();
+        $relationData = PostTag::findAll(['post_id' => $postId])->getResult();
         if ($relationData) {
             $tagIds = array_map(function ($v) {
                 return $v['tagId'];

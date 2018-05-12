@@ -25,14 +25,7 @@ class TagController
     public function index(): array
     {
         $paginate = Tag::getPaginateData([], ['created_at' => 'desc']);
-        return [
-            'data' => $paginate->data->toArray(),
-            'meta' => [
-                'total' => $paginate->total,
-                'current_page' => $paginate->page,
-                'page_size' => $paginate->pageSize,
-            ],
-        ];
+        return $paginate->toArray();
     }
 
     /**

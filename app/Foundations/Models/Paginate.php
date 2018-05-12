@@ -37,4 +37,16 @@ class Paginate
         $this->page = intval($page);
     }
 
+    public function toArray()
+    {
+        return [
+            'data' => is_array($this->data) ? $this->data : $this->data->toArray(),
+            'meta' => [
+                'total' => $this->total,
+                'current_page' => $this->page,
+                'page_size' => $this->pageSize,
+            ],
+        ];
+    }
+
 }
