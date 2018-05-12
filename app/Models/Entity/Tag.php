@@ -8,6 +8,7 @@
 
 namespace App\Models\Entity;
 
+use App\Foundations\Models\EasyTrait;
 use Swoft\Db\Bean\Annotation\Column;
 use Swoft\Db\Bean\Annotation\Entity;
 use Swoft\Db\Bean\Annotation\Id;
@@ -22,6 +23,7 @@ use Swoft\Http\Message\Server\Request;
  */
 class Tag extends Model
 {
+    use EasyTrait;
 
     /**
      * @Id()

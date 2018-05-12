@@ -3,6 +3,7 @@
 namespace App\Controllers\Backend;
 
 use App\Models\Entity\Tag;
+use Swoft\Db\Query;
 use Swoft\Http\Message\Server\Request;
 use Swoft\Http\Server\Bean\Annotation\Controller;
 use Swoft\Http\Server\Bean\Annotation\RequestMapping;
@@ -15,6 +16,7 @@ use Swoole\Mysql\Exception;
  */
 class TagController
 {
+
     /**
      * @RequestMapping(route="/backend/tag", method={RequestMethod::GET})
      *
@@ -22,8 +24,15 @@ class TagController
      */
     public function index(): array
     {
-        $tags = tag::findAll()->getResult();
-        return $tags ? $tags->toArray() : [];
+        $paginate = Tag::getPaginateData([], ['created_at' => 'desc']);
+        return [
+            'data' => $paginate->data->toArray(),
+            'meta' => [
+                'total' => $paginate->total,
+                'current_page' => $paginate->page,
+                'page_size' => $paginate->pageSize,
+            ],
+        ];
     }
 
     /**

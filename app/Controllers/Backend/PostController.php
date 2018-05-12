@@ -19,20 +19,17 @@ class PostController
      * @RequestMapping(route="/backend/post", method={RequestMethod::GET})
      * @return array
      */
-    public function index(Request $request): array
+    public function index(): array
     {
-        $page = $request->input('page', 1);
-        $pageSize = $request->input('page_size', 10);
-        $startLocation = ($page - 1) * $pageSize;
-
-        $posts = Post::findAll([], [
-            'limit' => $pageSize,
-            'offset' => $startLocation,
-            'orderby' => ['created_at' => 'desc']
-        ])->getResult();
-
-        $posts = $posts ? $posts->toArray() : [];
-        return $posts;
+        $paginate = Post::getPaginateData([], ['created_at' => 'desc']);
+        return [
+            'data' => $paginate->data->toArray(),
+            'meta' => [
+                'total' => $paginate->total,
+                'current_page' => $paginate->page,
+                'page_size' => $paginate->pageSize,
+            ],
+        ];
     }
 
     /**
