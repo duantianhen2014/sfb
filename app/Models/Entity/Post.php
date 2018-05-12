@@ -8,6 +8,7 @@
 
 namespace App\Models\Entity;
 
+use App\Foundations\Models\EasyTrait;
 use Overtrue\Pinyin\Pinyin;
 use Swoft\Db\Bean\Annotation\Column;
 use Swoft\Db\Bean\Annotation\Entity;
@@ -24,9 +25,11 @@ use Swoft\Http\Server\Bean\Annotation\RequestMethod;
  */
 class Post extends Model
 {
+    use EasyTrait;
 
     const IS_SHOW_ABLE = 1;
     const IS_SHOW_DISABLE = -1;
+
     const IS_DRAFT_ABLE = 1;
     const IS_DRAFT_DISABLE = -1;
 

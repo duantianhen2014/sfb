@@ -1,10 +1,4 @@
 <?php
-/**
- * File: Tag.php
- * Author: 小滕<616896861@qq.com>
- * Date: 2018/5/12 15:28
- */
-
 
 namespace App\Models\Entity;
 
@@ -19,9 +13,9 @@ use Swoft\Http\Message\Server\Request;
 
 /**
  * @Entity()
- * @Table(name="tags")
+ * @Table(name="categories")
  */
-class Tag extends Model
+class Category extends Model
 {
     use EasyTrait;
 
@@ -252,8 +246,8 @@ class Tag extends Model
     {
         $data = self::getData($request);
         $fields = [
-            'name' => '请输入标签名',
-            'originDescription' => '请输入标签描述',
+            'name' => '请输入分类名',
+            'originDescription' => '请输入分类描述',
             'seoKeywords' => '请输入SEO关键字',
             'seoDescription' => '请输入SEO描述',
         ];
