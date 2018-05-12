@@ -11,7 +11,6 @@ use Swoft\Http\Server\Bean\Annotation\Controller;
 use Swoft\Http\Server\Bean\Annotation\RequestMapping;
 use Swoft\Http\Server\Bean\Annotation\RequestMethod;
 use Swoft\Http\Message\Server\Response;
-use Swoft\Log\Log;
 
 /**
  * @Controller(prefix="/backend/post")
