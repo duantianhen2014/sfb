@@ -9,6 +9,8 @@
 namespace App\Foundations\Models;
 
 
+use Swoft\Db\Model;
+
 class Paginate
 {
 
@@ -29,7 +31,7 @@ class Paginate
      */
     public function __construct($data, $total = 0, $page = 1, $pageSize = 10)
     {
-        $this->data = $data;
+        $this->data = $data ?: new Model;
         $this->total = intval($total);
         $this->pageSize = intval($pageSize);
         $this->page = intval($page);

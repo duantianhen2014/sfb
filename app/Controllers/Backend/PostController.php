@@ -15,6 +15,7 @@ use Swoole\Mysql\Exception;
  */
 class PostController
 {
+
     /**
      * @RequestMapping(route="/backend/post", method={RequestMethod::GET})
      * @return array
