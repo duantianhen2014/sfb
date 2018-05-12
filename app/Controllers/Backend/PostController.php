@@ -50,12 +50,11 @@ class PostController
 
     /**
      * @RequestMapping(route="{postId}", method={RequestMethod::GET})
-     * @param Request $request
      * @param Response $response
      * @param $postId
      * @return mixed
      */
-    public function show(Request $request, Response $response, $postId)
+    public function show(Response $response, $postId)
     {
         $post = Post::findById($postId)->getResult();
         if (! $post) {
@@ -89,14 +88,13 @@ class PostController
 
     /**
      * @RequestMapping(route="{postId}", method={RequestMethod::DELETE})
-     * @param Request $request
      * @param Response $response
      * @param $postId
      *
      * @throws \Exception
      * @return mixed
      */
-    public function destroy(Request $request, Response $response, $postId)
+    public function destroy(Response $response, $postId)
     {
         $post = Post::findById($postId)->getResult();
         if (! $post) {

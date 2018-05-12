@@ -8,6 +8,7 @@ use Swoft\Db\Bean\Annotation\Id;
 use Swoft\Db\Bean\Annotation\Table;
 use Swoft\Db\Model;
 use Swoft\Db\Types;
+use Swoft\Http\Message\Server\Request;
 
 /**
  * @Entity()
@@ -19,200 +20,241 @@ class Category extends Model
     /**
      * @Id()
      * @Column(name="id", type=Types::INT)
-     * @var int
+     * @var int|null
      */
     private $id;
 
     /**
      * @Column(name="name", type=Types::STRING)
-     * @var string
+     * @var string|null
      */
     private $name;
 
     /**
      * @Column(name="origin_description", type=Types::STRING)
-     * @var string
+     * @var string|null
      */
-    private $origin_description;
+    private $originDescription;
 
     /**
      * @Column(name="html_description", type=Types::STRING)
-     * @var string
+     * @var string|null
      */
-    private $html_description;
+    private $htmlDescription;
 
     /**
      * @Column(name="seo_keywords", type=Types::STRING)
-     * @var string
+     * @var string|null
      */
-    private $seo_keywords;
+    private $seoKeywords;
 
     /**
      * @Column(name="seo_description", type=Types::STRING)
-     * @var string
+     * @var string|null
      */
-    private $seo_description;
+    private $seoDescription;
 
     /**
      * @Column(name="is_show", type=Types::INT)
-     * @var int
+     * @var int|null
      */
-    private $is_show;
+    private $isShow;
 
     /**
      * @Column(name="created_at", type=Types::INT)
-     * @var int
+     * @var int|null
      */
-    private $created_at;
+    private $createdAt;
 
     /**
      * @Column(name="updated_at", type=Types::INT)
-     * @var int
+     * @var int|null
      */
-    private $updated_at;
+    private $updatedAt;
 
     /**
-     * @return int
+     * @return int|null
      */
-    public function getId(): int
+    public function getId()
     {
         return $this->id;
     }
 
     /**
-     * @return string
+     * @return null|string
      */
-    public function getName(): string
+    public function getName()
     {
         return $this->name;
     }
 
     /**
-     * @return string
+     * @return null|string
      */
-    public function getOriginDescription(): string
+    public function getOriginDescription()
     {
-        return $this->origin_description;
+        return $this->originDescription;
     }
 
     /**
-     * @return string
+     * @return null|string
      */
-    public function getHtmlDescription(): string
+    public function getHtmlDescription()
     {
-        return $this->html_description;
+        return $this->htmlDescription;
     }
 
     /**
-     * @return string
+     * @return null|string
      */
-    public function getSeoKeywords(): string
+    public function getSeoKeywords()
     {
-        return $this->seo_keywords;
+        return $this->seoKeywords;
     }
 
     /**
-     * @return string
+     * @return null|string
      */
-    public function getSeoDescription(): string
+    public function getSeoDescription()
     {
-        return $this->seo_description;
+        return $this->seoDescription;
     }
 
     /**
-     * @return int
+     * @return int|null
      */
-    public function getisShow(): int
+    public function getIsShow()
     {
-        return $this->is_show;
+        return $this->isShow;
     }
 
     /**
-     * @return int
+     * @return int|null
      */
-    public function getCreatedAt(): int
+    public function getCreatedAt()
     {
-        return $this->created_at;
+        return $this->createdAt;
     }
 
     /**
-     * @return int
+     * @return int|null
      */
-    public function getUpdatedAt(): int
+    public function getUpdatedAt()
     {
-        return $this->updated_at;
+        return $this->updatedAt;
     }
 
     /**
-     * @param int $id
+     * @param int|null $id
      */
-    public function setId(int $id)
+    public function setId($id)
     {
         $this->id = $id;
     }
 
     /**
-     * @param string $name
+     * @param null|string $name
      */
-    public function setName(string $name)
+    public function setName($name)
     {
         $this->name = $name;
     }
 
     /**
-     * @param string $origin_description
+     * @param null|string $originDescription
      */
-    public function setOriginDescription(string $origin_description)
+    public function setOriginDescription($originDescription)
     {
-        $this->origin_description = $origin_description;
+        $this->originDescription = $originDescription;
     }
 
     /**
-     * @param string $html_description
+     * @param null|string $htmlDescription
      */
-    public function setHtmlDescription(string $html_description)
+    public function setHtmlDescription($htmlDescription)
     {
-        $this->html_description = $html_description;
+        $this->htmlDescription = $htmlDescription;
     }
 
     /**
-     * @param string $seo_keywords
+     * @param null|string $seoKeywords
      */
-    public function setSeoKeywords(string $seo_keywords)
+    public function setSeoKeywords($seoKeywords)
     {
-        $this->seo_keywords = $seo_keywords;
+        $this->seoKeywords = $seoKeywords;
     }
 
     /**
-     * @param string $seo_description
+     * @param null|string $seoDescription
      */
-    public function setSeoDescription(string $seo_description)
+    public function setSeoDescription($seoDescription)
     {
-        $this->seo_description = $seo_description;
+        $this->seoDescription = $seoDescription;
     }
 
     /**
-     * @param int $is_show
+     * @param int|null $isShow
      */
-    public function setIsShow(int $is_show)
+    public function setIsShow($isShow)
     {
-        $this->is_show = $is_show;
+        $this->isShow = $isShow;
     }
 
     /**
-     * @param int $created_at
+     * @param int|null $createdAt
      */
-    public function setCreatedAt(int $created_at)
+    public function setCreatedAt($createdAt)
     {
-        $this->created_at = $created_at;
+        $this->createdAt = $createdAt;
     }
 
     /**
-     * @param int $updated_at
+     * @param int|null $updatedAt
      */
-    public function setUpdatedAt(int $updated_at)
+    public function setUpdatedAt($updatedAt)
     {
-        $this->updated_at = $updated_at;
+        $this->updatedAt = $updatedAt;
+    }
+
+    /**
+     * 获取前端传递的数据
+     * @param Request $request
+     * @return array
+     */
+    public static function getData(Request $request)
+    {
+        $data = [
+            'name' => $request->input('name'),
+            'originDescription' => $request->input('originDescription'),
+            'seoKeywords' => $request->input('seoKeywords'),
+            'seoDescription' => $request->input('seoDescription'),
+            'isShow' => $request->input('isShow', 1),
+            'updatedAt' => time(),
+        ];
+        if ('POST' === $request->getMethod()) {
+            $data['createdAt'] = time();
+        }
+        if ($data['originDescription']) {
+            $data['htmlDescription'] = (new \Parsedown)->setBreaksEnabled(true)->text($data['originDescription']);
+        }
+        return $data;
+    }
+
+    public static function validateData(Request $request)
+    {
+        $data = self::getData($request);
+        $fields = [
+            'name' => '请输入分类名',
+            'originDescription' => '请输入分类描述',
+            'seoKeywords' => '请输入SEO关键字',
+            'seoDescription' => '请输入SEO描述',
+        ];
+        foreach ($fields as $field => $message) {
+            if (! (isset($data[$field]) && $data[$field])) {
+                throw new \Exception($message, 406);
+            }
+        }
+        return $data;
     }
 
 }
