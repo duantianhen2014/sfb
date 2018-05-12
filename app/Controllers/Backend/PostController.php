@@ -6,8 +6,6 @@ use App\Models\Entity\PostTag;
 use App\Models\Entity\Tag;
 use Exception;
 use App\Models\Entity\Post;
-use Swoft\Db\Db;
-use Swoft\Db\Query;
 use Swoft\Http\Message\Server\Request;
 use Swoft\Http\Server\Bean\Annotation\Controller;
 use Swoft\Http\Server\Bean\Annotation\RequestMapping;
@@ -75,7 +73,17 @@ class PostController
         if (! $post) {
             return $response->json(['msg' => '帖子不存在', 'code' => 404]);
         }
-        return $post->toArray();
+        $post = $post->toArray();
+
+        $relationData = PostTag::findAll(['post_id' => $postId], ['fields' => ['tag_id']])->getResult();
+        if ($relationData) {
+            $tagIds = array_map(function ($v) {
+                return $v['tagId'];
+            }, $relationData->toArray());
+            $tags = Tag::query()->whereIn('id', $tagIds)->get()->getResult();
+        }
+        $post['tags'] = $tags ?? [];
+        return $post;
     }
 
     /**
