@@ -14,6 +14,7 @@ use Swoft\Db\Bean\Annotation\Id;
 use Swoft\Db\Bean\Annotation\Table;
 use Swoft\Db\Model;
 use Swoft\Db\Types;
+use Swoft\Http\Message\Server\Request;
 
 /**
  * @Entity()
@@ -219,6 +220,47 @@ class Tag extends Model
     public function setUpdatedAt($updatedAt)
     {
         $this->updatedAt = $updatedAt;
+    }
+
+    /**
+     * 获取前端传递的数据
+     * @param Request $request
+     * @return array
+     */
+    public static function getData(Request $request)
+    {
+        $data = [
+            'name' => $request->input('name'),
+            'originDescription' => $request->input('originDescription'),
+            'seoKeywords' => $request->input('seoKeywords'),
+            'seoDescription' => $request->input('seoDescription'),
+            'isShow' => $request->input('isShow', 1),
+            'updatedAt' => time(),
+        ];
+        if ('POST' === $request->getMethod()) {
+            $data['createdAt'] = time();
+        }
+        if ($data['originDescription']) {
+            $data['htmlDescription'] = (new \Parsedown)->setBreaksEnabled(true)->text($data['originDescription']);
+        }
+        return $data;
+    }
+
+    public static function validateData(Request $request)
+    {
+        $data = self::getData($request);
+        $fields = [
+            'name' => '请输入标签名',
+            'originDescription' => '请输入标签描述',
+            'seoKeywords' => '请输入SEO关键字',
+            'seoDescription' => '请输入SEO描述',
+        ];
+        foreach ($fields as $field => $message) {
+            if (! (isset($data[$field]) && $data[$field])) {
+                throw new \Exception($message, 406);
+            }
+        }
+        return $data;
     }
 
 }
