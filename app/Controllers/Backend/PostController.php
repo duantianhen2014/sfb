@@ -2,13 +2,18 @@
 
 namespace App\Controllers\Backend;
 
+use App\Models\Entity\PostTag;
+use App\Models\Entity\Tag;
+use Exception;
 use App\Models\Entity\Post;
+use Swoft\Db\Db;
+use Swoft\Db\Query;
 use Swoft\Http\Message\Server\Request;
 use Swoft\Http\Server\Bean\Annotation\Controller;
 use Swoft\Http\Server\Bean\Annotation\RequestMapping;
 use Swoft\Http\Server\Bean\Annotation\RequestMethod;
 use Swoft\Http\Message\Server\Response;
-use Swoole\Mysql\Exception;
+use Swoft\Log\Log;
 
 /**
  * @Controller(prefix="/backend/post")
@@ -39,11 +44,23 @@ class PostController
     public function store(Request $request, Response $response)
     {
         $data = Post::validateData($request);
+
         $result = (new Post)->fill($data)->save()->getResult();
-        if ($result) {
-            return $response->json(['code' => 200]);
+        if (! $result) {
+            throw new Exception('帖子创建失败', 500);
         }
-        throw new Exception('帖子创建失败', 500);
+
+        // TAG关联
+        $tagIds = array_flip(array_flip($request->input('tags', [])));
+        $manyRelationData = array_map(function ($value) use ($result) {
+            return [
+                'post_id' => $result,
+                'tag_id' => $value,
+            ];
+        }, $tagIds);
+        PostTag::batchInsert($manyRelationData)->getResult();
+
+        return $response->json(['code' => 200]);
     }
 
     /**
@@ -79,6 +96,19 @@ class PostController
         }
         $result = $post->fill($data)->update()->getResult();
         if ($result) {
+
+            // TAG更新
+            PostTag::query()->where('post_id', $post->getId())->delete()->getResult();
+            $tagIds = array_flip(array_flip($request->input('tags', [])));
+            $manyRelationData = array_map(function ($value) use ($post) {
+                return [
+                    'post_id' => $post->getId(),
+                    'tag_id' => $value,
+                ];
+            }, $tagIds);
+            PostTag::batchInsert($manyRelationData)->getResult();
+
+
             return $response->json(['code' => 200]);
         }
         throw new Exception('帖子编辑失败', 500);
@@ -98,11 +128,11 @@ class PostController
         if (! $post) {
             return $response->json(['msg' => '帖子不存在', 'code' => 404]);
         }
-        $result = $post->delete()->getResult();
-        if ($result) {
-            return $response->json(['code' => 200]);
-        }
-        throw new Exception('帖子删除失败', 500);
+
+        PostTag::query()->where('post_id', $post->getId())->delete()->getResult();
+        $post->delete()->getResult();
+
+        return $response->json(['code' => 200]);
     }
 
 }

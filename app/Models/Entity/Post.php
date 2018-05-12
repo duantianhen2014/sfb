@@ -29,6 +29,7 @@ class Post extends Model
 
     const IS_SHOW_ABLE = 1;
     const IS_SHOW_DISABLE = -1;
+
     const IS_DRAFT_ABLE = 1;
     const IS_DRAFT_DISABLE = -1;
 

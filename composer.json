@@ -42,7 +42,8 @@
       "App\\": "app/"
     },
     "files": [
-      "app/Swoft.php"
+      "app/Swoft.php",
+      "app/helper.php"
     ]
   },
   "autoload-dev": {
