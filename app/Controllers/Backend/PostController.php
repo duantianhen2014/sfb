@@ -32,7 +32,7 @@ class PostController
         $postIds = array_map(function ($post) {
             return $post['id'];
         }, $data);
-        $postTagRelation = PostTag::query()->whereIn('post_id', $postIds)->get()->getResult()->toArray();
+        $postTagRelation = PostTag::query()->whereIn('post_id', $postIds)->get()->getResult();
         $postHasManyTags = [];
         $tagIds = [];
         foreach ($postTagRelation as $item) {
@@ -40,7 +40,7 @@ class PostController
         }
         // 预读所有需要的TAG，最后结构如下：
         // {tag_id:tag, tag_id: tag}
-        $tagsTemp = Tag::query()->whereIn('id', $tagIds)->get()->getResult()->toArray();
+        $tagsTemp = Tag::query()->whereIn('id', $tagIds)->get()->getResult();
         $tags = [];
         foreach ($tagsTemp as $tagTempItem) {
             $tags[$tagTempItem['id']] = $tagTempItem;
