@@ -20,6 +20,7 @@ use Swoft\Http\Message\Server\Response;
 use Swoft\Exception\BadMethodCallException;
 use Swoft\Exception\ValidatorException;
 use Swoft\Http\Server\Exception\BadRequestException;
+use Swoft\Bean\Annotation\Value;
 
 /**
  * the handler of global exception
@@ -33,6 +34,13 @@ use Swoft\Http\Server\Exception\BadRequestException;
  */
 class SwoftExceptionHandler
 {
+
+    /**
+     * @Value(name="${config.app.debug}")
+     * @var bool
+     */
+    protected $debug;
+
     /**
      * @Handler(Exception::class)
      *
@@ -48,7 +56,13 @@ class SwoftExceptionHandler
         $code      = $throwable->getCode();
         $exception = $throwable->getMessage();
 
-        $data = ['msg' => $exception, 'file' => $file, 'line' => $line, 'code' => $code];
+        $data = ['msg' => $exception, 'code' => $code];
+
+        if ($this->debug) {
+            $data['file'] = $file;
+            $data['line'] = $line;
+        }
+
         App::error(json_encode($data));
         return $response->json($data);
     }
