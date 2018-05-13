@@ -29,6 +29,7 @@ return [
         'App\Process',
         'App\Fallback',
         'App\WebSocket',
+        'App\Foundations',
     ],
     'I18n'         => [
         'sourceLanguage' => '@root/resources/messages/',
@@ -38,4 +39,5 @@ return [
     'service'      => require __DIR__ . DS . 'service.php',
     'breaker'      => require __DIR__ . DS . 'breaker.php',
     'provider'      => require __DIR__ . DS . 'provider.php',
+    'administrator' => require __DIR__ . DS . 'administrator.php',
 ];
